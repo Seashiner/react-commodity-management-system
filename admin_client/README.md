@@ -1,68 +1,55 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 项目描述
+- 此项目为一个前后台分离的后台管理的SPA应用, 包括前端PC应用和后端应用
+- 包括用户管理 / 商品分类管理 / 商品管理 / 权限管理等功能模块
+- 前端: 使用React全家桶/技术栈 + Antd + Axios + ES6+ + Webpack等技术
+- 后端: 使用Node + Express + Mongodb等技术
+- 采用模块化、组件化、工程化的模式开发
 
-## Available Scripts
+# 项目搭建步骤
 
-In the project directory, you can run:
+## 使用脚手架
+```
+  npm install -g create-react-app
+  create-react-app admin-client
+  cd admin-client
+  yarn start
 
-### `yarn start`
+  npm run build  // 打包
+  npm install -g serve  // 安装静态资源
+  serve build  // 运行打包后的项目
+```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 引入antd
+具体配置请参考官方文档：https://ant.design/docs/react/use-with-create-react-app-cn
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+【注意点：】
+在进行自定义主题时，要安装less-loader@5，并且移除 lessOptions 这一级，直接配置选项
 
-### `yarn test`
+`$ yarn add less less-loader@5`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```js
+const { override, fixBabelImports, addLessLoader } = require('customize-cra');
 
-### `yarn build`
+module.exports = override(
+  fixBabelImports('import', {
+    libraryName: 'antd',
+    libraryDirectory: 'es',
+    style: true,
+  }),
+  addLessLoader({
+    javascriptEnabled: true,
+    modifyVars: { '@primary-color': '#1DA57A' },
+  }),
+);
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
