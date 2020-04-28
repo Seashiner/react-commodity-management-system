@@ -43,8 +43,27 @@ module.exports = override(
 );
 
 ```
+## 引入路由
+`yarn add react-router-dom`
 
+1、在 pages 下创建 admin 、login 
+2、给入口文件 index.js 中的 < App/> 包裹 **< BrowserRouter>** 
+3、在 App.js 中映射路由
+```js
+  <Switch>
+    <Route path='/login' component={Login}/>
+    <Route path='/admin' component={Admin}/>
+    <Redirect to='/login'/>
+  </Switch>
+```
+## Login 组件
 
+重置样式reset.css文件，可使用 github 上的 **minireset** 
+react中使用img引入图片时候，要用import
+```js
+import logo from './images/sun.png'
+<img src={logo} alt = "logo"/>
+```
 
 
 
