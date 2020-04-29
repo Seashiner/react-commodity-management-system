@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import { Button ,DatePicker } from 'antd';
+import Count from './components/count/count.jsx'
 
 export default class App extends Component {
   render() {
     return (
       <div>
-        Hello。
-        <Button type="primary">按钮</Button>
-        <DatePicker/>
+        <Count/>
       </div>
     )
   }
 }
+
 
