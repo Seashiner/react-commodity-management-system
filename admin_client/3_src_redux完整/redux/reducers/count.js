@@ -1,14 +1,14 @@
-
+import {INCREMENT , DECREMENT} from '../action_type.js'
 
 export default function (preState = 0 , action){
   let newState;
 
   const {type , data} = action
   switch(type){
-    case 'increment':
+    case INCREMENT:
       newState = preState + data
       break;
-    case 'decrement':
+    case DECREMENT:
       newState = preState - data
       break;
 		default:

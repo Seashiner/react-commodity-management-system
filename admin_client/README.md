@@ -1,7 +1,7 @@
 # Redux 
 <img src='./public/redux原理图.png'>
 
-## mini版本redux
+## mini版本redux (没有Action Creators)
 
 `yarn add redux`
 
@@ -45,10 +45,24 @@ store.subscribe(()=>{
 })
 ```
 
+## 完整版本redux (有Action Creators)
 
+基本步骤：
 
+1、创建 actions/creator.js ，专门用于创建和 count 组件相关的 action , 并分别暴露
+```js
+export const createIncrementAction = value => ({type : 'increment' , data : value})
+```
+2、在 count 组件中，引入 actions/creator.js 中定义的 action
+```js
+import {createIncrementAction , createDecrementAction} from '../../redux/count_action_creator.js'
 
-
+store.dispatch(createIncrementAction(value * 1))
+```
+3、优化：创建 action_type.js ,用于定义整个应用中的 action 对象中的 type 属性的常量,可以在使用这些变量的文件引入
+```js
+export const INCREMENT = 'increment'
+```
 
 
 
