@@ -5,7 +5,7 @@
 
 `yarn add redux`
 
-基本步骤：
+**基本步骤：**
 
 1、建立redux文件夹，建立store.js，引入redux，创建一个store核心对象
 
@@ -47,7 +47,7 @@ store.subscribe(()=>{
 
 ## 完整版本redux (有Action Creators)
 
-基本步骤：
+**基本步骤：**
 
 1、创建 actions/creator.js ，专门用于创建和 count 组件相关的 action , 并分别暴露
 ```js
@@ -65,11 +65,94 @@ export const INCREMENT = 'increment'
 ```
 
 
+# react-redux 
+<img src='./public/react-redux模型图.png'>
+
+**react-redux将所有组件分成两大类:**
+
+- UI组件
+
+a.只负责 UI 的呈现，不带有任何业务逻辑
+
+b.通过props接收数据(一般数据和函数)
+
+c.不使用任何 Redux 的 API
+
+d.一般保存在components文件夹下
+
+- 容器组件
+
+a.负责管理数据和业务逻辑，不负责UI的呈现
+
+b.使用 Redux 的 API
+
+c.一般保存在containers文件夹下
+
+<hr>
+
+**基本步骤：**
+
+`yarn add react-redux`
+
+- 建立containers文件夹，里面建立count.jsx（容器组件）
+- 容器组件里引入 count.jsx(UI组件)，并在容器组件中定义传到UI组件的状态和方法
+```
+- 容器组件是真正和redux打交道的，里面可以随意的使用redux的api。
+- 容器组件会传给UI组件：(1).redux中所保存的状态。 (2).用于操作状态的方法。
+- 容器给UI传递：状态、操作状态的方法，均通过props传递，所以UI组件通过 this.props 获取传递过去的状态和方法。
+- 容器组件，肯定是组件，但是容器组件不是你亲自去定义的，是靠connect方法生成的
+```
+**connect方法**
+
+	1.connect()的返回值依然是一个函数。
+
+	2.connect()(UI组件)的返回值是这个UI组件的容器组件。
+
+	3.connect这样使用：connect(mapStateToProps，mapDispatchToProps)(UI组件)。
+
+	4.mapStateToProps和mapDispatchToProps都是函数
+
+	5.特别注意：mapDispatchToProps可以直接是一个对象。
+
+	6.connect函数底层有判断，若第二个参数是对象，会加工成一个函数
 
 
+**mapStateToProps方法**
+
+	1、专门用于给UI组件传递redux中的状态，以props形式传递。
+
+	2、因为 props是key-value的形式，所以mapStateToProps方法必须返回一个Object对象
+
+	3、mapStateToProps方法所返回的那个对象的key就作为传给UI组件props的key
+
+	4、mapStateToProps方法所返回的那个对象的value就作为传给UI组件props的value
+
+**mapDispatchToProps方法**
+
+1、专门用于给UI组件传递redux中的状态，以props形式传递。
+
+2、因为props是key-value的形式，所以mapStateToProps方法必须返回一个Object对象
+
+3、mapStateToProps方法所返回的那个对象的key就作为传给UI组件props的key
+
+4、mapStateToProps方法所返回的那个对象的value就作为传给UI组件props的value
 
 
+- App中渲染的不再是UI的Count了，而是容器的Count
 
+- index.js中，要引入Provider，给Provider传递store
+```js
+import {Provider} from 'react-redux'
 
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
+```
 
+- UI组件中用this.props.xxxx 得到状态、操作状态
+
+	
 
