@@ -8,11 +8,13 @@ export default class Count extends Component {
   increment=()=>{
     const {value} = this.refs.user_selected
     // store.dispatch(increment(value * 1))
+    this.props.increment(value*1)
   }
 
   decrement=()=>{
     const {value} = this.refs.user_selected
     // store.dispatch(decrement(value * 1))
+    this.props.decrement(value*1)
   }
 
   incrementIfOdd=()=>{
@@ -34,7 +36,7 @@ export default class Count extends Component {
     return (
       <div>
 				{/* <h1>当前求和为：{store.getState()}</h1> */}
-				<h1>当前求和为：xxxx</h1>
+        <h1>当前求和为：{this.props.count}</h1>
 				<select ref="user_selected">
 					<option value="1">1</option>
 					<option value="2">2</option>
