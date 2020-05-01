@@ -4,14 +4,15 @@ import App from './App';
 import store from './redux/store.js'
 import {Provider} from 'react-redux'
 
+// ReactDOM.render(<App />,document.getElementById('root'));
+// store.subscribe(()=>{
+//   ReactDOM.render(<App />,document.getElementById('root'));
+// })
+
+
 ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById('root')
 );
-
-// store.subscribe(()=>{
-//   ReactDOM.render(<App />,document.getElementById('root'));
-// })
-

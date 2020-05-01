@@ -141,6 +141,7 @@ c.一般保存在containers文件夹下
 - App中渲染的不再是UI的Count了，而是容器的Count
 
 - index.js中，要引入Provider，给Provider传递store
+Provider的作用是给容器组件传递state和dispatch ,并且能够将变化渲染到页面
 ```js
 import {Provider} from 'react-redux'
 
@@ -154,5 +155,83 @@ ReactDOM.render(
 
 - UI组件中用this.props.xxxx 得到状态、操作状态
 
-	
+# redux 异步编程 ———— redux-thunk
+
+`yarn add redux-thunk`
+
+**基本步骤**
+
+- 在创建 store 时，应用中间件
+```js
+import {createStore , applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
+
+export default createStore(countReducer , applyMiddleware(thunk))
+```
+- 在 ActionCreator 中进行异步处理
+```js
+export const incrementAsync = value => {
+  return (dispatch)=>{
+    setTimeout(() => {
+      dispatch(increment(value))
+    }, 1000);
+  }
+}
+```
+- 在容器组件中定义异步的方法
+```js
+import {increment , decrement ,incrementAsync} from '../redux/actions/count.js'
+
+export default connect(
+  state =>({count:state}),
+  {increment,decrement,incrementAsync}
+)(Count)
+```
+- 在UI组件中接收容器组件传过来的方法
+```js
+this.props.incrementAsync(value)
+```
+
+## 多个组件应用redux
+
+**基本步骤**
+
+- 新建 reducers/index.js ,该文件是汇总一个一个的reducer，最终生成一个总的reducer
+
+1.combineReducers是函数
+
+2.combineReducers调用时要传入一个对象，这个对象就是redux中的总状态--state！！！
+
+3.combineReducers的返回值是一个总reducer
+
+```js
+import countReducer from './count.js'
+import personReducer from './count.js'
+import {combineReducers} from 'redux'
+
+export default combineReducers({
+	count:countReducer,
+	persons:personReducer
+})
+```
+
+- 在 store.js 中引入总的 reducer
+
+```js
+import allReducer from './reducers'
+
+export default createStore(allReducer,applyMiddleware(thunk))
+```
+
+- 在组件中得到state和action
+
+```js
+this.props.count
+this.props.persons
+```
+
+
+
+
+
 

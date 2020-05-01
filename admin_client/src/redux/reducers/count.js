@@ -1,20 +1,20 @@
-import {INCREMENT , DECREMENT} from '../action_type.js'
 
-export default function (preState = 0 , action){
+
+let initState = 0
+export default function(perState=initState , actions){
   let newState;
-
-  const {type , data} = action
+  const {type , data} = actions
   switch(type){
-    case INCREMENT:
-      newState = preState + data
-      break;
-    case DECREMENT:
-      newState = preState - data
-      break;
-		default:
-      return preState
-
-  }
-
-  return newState
+    case 'increment':
+      newState = perState + data
+      return newState
+    case 'decrement':
+      newState = perState - data
+      return newState
+    default:
+      return perState
+    }
 }
+
+
+

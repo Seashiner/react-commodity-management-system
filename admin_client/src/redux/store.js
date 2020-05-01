@@ -1,21 +1,6 @@
-import {createStore} from 'redux'
-import countReducer from './reducers/count.js'
+import {createStore , applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
+import allReducer from './reducers/index.js'
 
-export default createStore(countReducer)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default createStore(allReducer,applyMiddleware(thunk))
 
