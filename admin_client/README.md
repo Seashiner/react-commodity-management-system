@@ -218,7 +218,9 @@ export default combineReducers({
 - 在 store.js 中引入总的 reducer
 
 ```js
+import {createStore,applyMiddleware} from 'redux'
 import allReducer from './reducers'
+import thunk from 'redux-thunk'
 
 export default createStore(allReducer,applyMiddleware(thunk))
 ```
