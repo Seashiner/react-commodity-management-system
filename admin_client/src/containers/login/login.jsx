@@ -2,10 +2,13 @@ import React, { Component } from 'react'
 import logo from './images/sun.png'
 import {reqLogin} from '../../api'
 import './css/login.less'
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button ,message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import {add_userInfo} from '../../redux/actions/login.js'
+import {connect} from 'react-redux'
+import { Redirect } from 'react-router-dom';
 
-export default class login extends Component {
+class Login extends Component {
   // onFinish = values => {
   //   axios.post('http://localhost:3000/login',values).then(
   //     response =>{console.log('成功了',response)},
@@ -15,7 +18,15 @@ export default class login extends Component {
   // onFinish = async values => await ajax.post('http://localhost:3000/login',values)
   onFinish = async values => {
     let result = await reqLogin(values)
-    console.log(result);
+    const {status,data,msg} = result
+    if(status === 0){
+      message.success('登录成功')
+      // this.props.history.replace('/admin')
+      this.props.add_userInfo(data)
+      console.log(data);
+    }else{
+      message.error(msg)
+    }
   }
 
 
@@ -55,6 +66,9 @@ export default class login extends Component {
   }
 
   render(){
+
+    if(this.props.isLogin) return <Redirect to="/admin"/>
+
     return (
       <div className="login">
         <header>
@@ -106,3 +120,13 @@ export default class login extends Component {
     )
   }
 }
+
+
+export default connect(
+  state => ({
+    userInfo:state.userInfo,
+    isLogin:state.userInfo.isLogin
+  }),
+  {add_userInfo}
+)(Login)
+

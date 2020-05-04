@@ -195,6 +195,100 @@ axios.post('http://localhost:3000/login',data)
 - 统一处理post请求json编码问题（转为urlencoded）
 - 统一返回真正的数据data，而不是response对象
 - 统一处理错误
+- 进度条
+
+## Login 组件
+
+1.登录结果的提示+进度条
+
+2.若登录成功，跳转到：/admin
+
+```js
+this.props.history.replace('/admin')
+```
+
+3.搭建项目的redux环境
+
+4.登录成功后，保存用户信息到redux
+
+```js
+this.props.add_userInfo(data)
+```
+
+5.Admin组件读取用户名展示
+
+```js
+{this.props.username}
+
+state => ({
+    username:state.userInfo.user.username
+  })
+```
+6.处理刷新页面redux信息丢失的问题——localStorage
+
+```js
+  export const add_userInfo = userObj => {
+  const {user,token} = userObj
+  localStorage.setItem('user',JSON.stringify(user))
+  localStorage.setItem('token',token)
+  return {type : ADD_USERINFO , data : userObj}
+}
+```
+```js
+let _user;
+
+try {
+  _user = JSON.parse(localStorage.getItem('user'))
+} catch (error) {
+  _user = null
+}
+
+let _token = localStorage.getItem('token')
+
+let initState = {
+  user: _user || {} , 
+  token: _token || '',
+  isLogin : _user && _token ? true :false
+}
+```
+7.给Login组件和Admin组件增加权限的校验
+
+Login组件:如果已经登录，就直接跳转到 admin 组件中，并且停止渲染（render）整个login组件
+
+```js
+  render(){
+    if(this.props.isLogin) return <Redirect to="/admin"/>
+    return (
+      ... ...
+    )
+  }
+---------------------------------------------------------------
+  state => ({
+    username:state.userInfo.user.username,
+    isLogin:state.userInfo.isLogin
+  })
+
+```
+Admin组件:如果没有登录，就直接跳转到 login 组件中，并且停止渲染（render）整个 admin 组件
+
+```js
+  render(){
+    if(!this.props.isLogin) return <Redirect to="/login"/>
+    return (
+      ... ...
+    )
+  }
+  ---------------------------------------------------------------
+  state => ({
+    username:state.userInfo.user.username,
+    isLogin:state.userInfo.isLogin
+  })
+
+```
+
+8.Header组件-静态
+9.Header组件-全屏，使用screenfull
+10.Header组件-退出登录
 
 
 

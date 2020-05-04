@@ -10,11 +10,14 @@
 import axios from 'axios'
 import qs from 'querystring' //用于将对象转为urlencoded字符串
 import {message as msg} from 'antd'
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = '/api';
 axios.defaults.timeout = 2000;
 
 axios.interceptors.request.use((config)=>{
+  nprogress.start();
   const {method,data} = config
   if(method.toLowerCase() === 'post' & data instanceof Object){
     config.data = qs.stringify(data)
@@ -24,10 +27,12 @@ axios.interceptors.request.use((config)=>{
 
 axios.interceptors.response.use(
   response => {
-    return response.data
+    nprogress.done();
+    return response.data;
   },
   	//失败的回调：1.返回的http状态码不是2开头；2.达到了超时时间；3.网络不通
   err => {
+    nprogress.done();
     let errMsg = '未知错误，请联系管理员'
     const {message} = err
     if(message.indexOf('401') !== -1) errMsg = '未登录或身份过期，请重新登录！'
@@ -35,6 +40,7 @@ axios.interceptors.response.use(
     else if(message.indexOf('timeout') !== -1) errMsg = '网络不稳定，连接超时！'
     msg.error(errMsg,1)
     return new Promise(()=>{}) //统一处理错误
+    
   }
 )
 
