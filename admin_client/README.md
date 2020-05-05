@@ -298,9 +298,11 @@ Admin组件:如果没有登录，就直接跳转到 login 组件中，并且停�
 ```
 
 8.Header组件-静态
+
 9.Header组件-全屏，使用screenfull.js
 
 `yarn add screenfull`
+
 `import screenfull from 'screenfull'`
 
 设置是否全屏 的state ———— 设置点击toggle事件 ———— 在生命周期componentDidMount中检测屏幕的变化，通过screenfull.onchange事件来设置setState全屏的状态
@@ -367,24 +369,23 @@ export default Header
 ### 动态生成日期
 
 `yarn add dayjs`
+
 `import dayjs from 'dayjs'`
 
 设置 时间 的state ———— 在生命周期componentDidMount中设置定时器每秒更改setState一下时间 ———— 在生命周期componentWillUnmount中清除定时器
 
 ### 动态生成天气
-
+`yarn add jsonp` 利用 jsonp 来解决跨域问题
 
 ## LeftNav 组件
 
-npm view antd version
+`npm view antd version` 产看所有版本
 
-yarn remove antd
+`yarn remove antd` 移除
 
-yarn add antd
+利用 递归 动态生成导航
 
-
-
-
+## 二级路由
 
 
 

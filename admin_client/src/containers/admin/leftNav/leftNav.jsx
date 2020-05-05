@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Menu } from 'antd';
+import { Link} from 'react-router-dom'
 import logo from '../../../assets/images/sun.png'
 import './css/leftNav.less'
 import menuList from '../../../config/menuConfig.js'
@@ -13,7 +14,9 @@ export default class LeftNav extends Component {
       if(!item.children){
         return (
           <Item key={item.key} icon={<item.icon/>}>
+            <Link to={item.path} style={{color: 'white'}}>
               {item.title}
+            </Link>
           </Item>
         )
       }else{

@@ -1,12 +1,20 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {delete_userInfo} from '../../redux/actions/login.js'
-// import { Redirect } from 'react-router-dom'
 import { Layout } from 'antd';
+import { Switch,Redirect,Route} from 'react-router-dom'
+import {delete_userInfo} from '../../redux/actions/login.js'
 import './css/admin.less'
 import Header from './header/header.jsx'
 import LeftNav from './leftNav/leftNav.jsx'
 import Check from '../Hoc/check.jsx'
+import Home from './home/home.jsx'
+import Category from './category/category.jsx'
+import Product from './product/product.jsx'
+import User from './user/user.jsx'
+import Role from './role/role.jsx'
+import Pie from './pie/pie.jsx'
+import Line from './line/line.jsx'
+import Bar from './bar/bar.jsx'
 
 
 const { Footer, Sider, Content } = Layout;
@@ -40,7 +48,19 @@ class Admin extends Component {
           </Sider>
           <Layout>
             <Header/>
-            <Content>Content</Content>
+            <Content>
+              <Switch>
+                <Route path="/admin/home" component={Home}/>
+                <Route path="/admin/prod_about/category" component={Category}/>
+                <Route path="/admin/prod_about/product" component={Product}/>
+                <Route path="/admin/user" component={User}/>
+                <Route path="/admin/role" component={Role}/>
+                <Route path="/admin/charts/bar" component={Bar}/>
+                <Route path="/admin/charts/line" component={Line}/>
+                <Route path="/admin/charts/pie" component={Pie}/>
+                <Redirect to="/admin/home"/>
+              </Switch>
+            </Content>
             <Footer>Footer</Footer>
           </Layout>
         </Layout>
