@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
-import {connect} from 'react-redux'
+import {connect, connectAdvanced} from 'react-redux'
 import {delete_userInfo} from '../../redux/actions/login.js'
-// import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { Layout } from 'antd';
 import './css/admin.less'
 import Header from './header/header.jsx'
-import LeftNav from './leftNav/leftNav.jsx'
-import Check from '../Hoc/check.jsx'
-
 
 const { Footer, Sider, Content } = Layout;
 
@@ -19,8 +16,6 @@ const { Footer, Sider, Content } = Layout;
   {delete_userInfo}
 )
 
-@Check
-
 class Admin extends Component {
 
   // loginOut=()=>{
@@ -28,16 +23,14 @@ class Admin extends Component {
   // }
 
   render() {
-    // if(!this.props.isLogin) return <Redirect to="/login"/>
+    if(!this.props.isLogin) return <Redirect to="/login"/>
     return (
       <div>
         {/* 你好，{this.props.username}
         <button onClick={this.loginOut}>退出登录</button> */}
 
         <Layout className='admin_container'>
-          <Sider>
-            <LeftNav/>
-          </Sider>
+          <Sider>Sider</Sider>
           <Layout>
             <Header/>
             <Content>Content</Content>

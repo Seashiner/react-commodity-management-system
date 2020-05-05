@@ -227,14 +227,23 @@ state => ({
 6.处理刷新页面redux信息丢失的问题——localStorage
 
 ```js
+  actions:
+
   export const add_userInfo = userObj => {
   const {user,token} = userObj
   localStorage.setItem('user',JSON.stringify(user))
   localStorage.setItem('token',token)
   return {type : ADD_USERINFO , data : userObj}
+
+  export const delete_userInfo = () =>{
+  localStorage.clear()
+  return {type : DELETE_USERINFO}
+}
 }
 ```
 ```js
+reducers:
+
 let _user;
 
 try {
@@ -252,6 +261,8 @@ let initState = {
 }
 ```
 7.给Login组件和Admin组件增加权限的校验
+
+传递一个标识符：isLogin（当token 和 user 同时都有值的时候才算登录）
 
 Login组件:如果已经登录，就直接跳转到 admin 组件中，并且停止渲染（render）整个login组件
 
@@ -287,8 +298,94 @@ Admin组件:如果没有登录，就直接跳转到 login 组件中，并且停�
 ```
 
 8.Header组件-静态
-9.Header组件-全屏，使用screenfull
+9.Header组件-全屏，使用screenfull.js
+
+`yarn add screenfull`
+`import screenfull from 'screenfull'`
+
+设置是否全屏 的state ———— 设置点击toggle事件 ———— 在生命周期componentDidMount中检测屏幕的变化，通过screenfull.onchange事件来设置setState全屏的状态
+
 10.Header组件-退出登录
+
+```js
+this.props.delete_userInfo()
+```
+
+## 装饰器语法来定义容器组件
+
+```js
+@connect(
+  state => ({}),
+  {}
+)
+
+class Header extends Component {}
+
+export default Header
+
+```
+## 使用高阶组件模仿路由守卫来定义页面访问的权限
+
+```js
+export default function (ReceiveComponent){
+  @connect(
+    state => ({
+      isLogin:state.userInfo.isLogin
+    })
+  )
+
+  class TargetComponent extends Component {
+    render() {
+      const {isLogin} = this.props
+      const {pathname} = this.props.location
+      if(!isLogin && pathname !== '/login') return <Redirect to="/login"/>
+      if(isLogin && pathname === '/login') return <Redirect to="/admin"/>
+
+      return <ReceiveComponent {...this.props}/>
+    }
+  }
+
+  return TargetComponent
+}
+```
+```js
+
+@connect(
+  state => ({}),
+  {}
+)
+
+@Check
+
+class Header extends Component {}
+
+export default Header
+
+```
+## Header 组件
+
+### 动态生成日期
+
+`yarn add dayjs`
+`import dayjs from 'dayjs'`
+
+设置 时间 的state ———— 在生命周期componentDidMount中设置定时器每秒更改setState一下时间 ———— 在生命周期componentWillUnmount中清除定时器
+
+### 动态生成天气
+
+
+## LeftNav 组件
+
+npm view antd version
+
+yarn remove antd
+
+yarn add antd
+
+
+
+
+
 
 
 

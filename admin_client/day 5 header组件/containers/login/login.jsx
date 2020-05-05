@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import logo from '../../assets/images/sun.png'
+import logo from './images/sun.png'
 import {reqLogin} from '../../api'
 import './css/login.less'
 import { Form, Input, Button ,message } from 'antd';
@@ -7,17 +7,6 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {add_userInfo} from '../../redux/actions/login.js'
 import {connect} from 'react-redux'
 import { Redirect } from 'react-router-dom';
-import Check from '../Hoc/check.jsx'
-
-@connect(
-  state => ({
-    userInfo:state.userInfo,
-    isLogin:state.userInfo.isLogin
-  }),
-  {add_userInfo}
-)
-
-@Check
 
 class Login extends Component {
   // onFinish = values => {
@@ -132,14 +121,12 @@ class Login extends Component {
   }
 }
 
-export default Login
 
-
-// export default connect(
-//   state => ({
-//     userInfo:state.userInfo,
-//     isLogin:state.userInfo.isLogin
-//   }),
-//   {add_userInfo}
-// )(Login)
+export default connect(
+  state => ({
+    userInfo:state.userInfo,
+    isLogin:state.userInfo.isLogin
+  }),
+  {add_userInfo}
+)(Login)
 
