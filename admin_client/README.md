@@ -379,17 +379,48 @@ export default Header
 
 ## LeftNav 组件
 
-`npm view antd version` 产看所有版本
+`npm view antd version` 查看所有版本
 
 `yarn remove antd` 移除
 
+### 二级路由
 利用 递归 动态生成导航
 
-## 二级路由
+### 在非路由组件中使用路由组件的API —— withRouter
+```js
+import {withRouter} from 'react-router-dom'
+
+@withRouter
+class LeftNav extends Component{}
+
+export default LeftNav
+```
+### 解决刷新后，左侧导航默认选中项问题
+
+让Menu的属性defaultSelectedKeys根据当前的路径动态展示
+```js
+let {pathname} = this.props.location
+let currentName = pathname.split('/').slice(-1)
+--------------------------------------------------------
+<Menu
+  defaultSelectedKeys={currentName}
+  // defaultOpenKeys={['sub1']}
+  mode="inline"
+  theme="dark"
+>
+... ...
+```
+### 解决退出重新登录后，左侧导航没有默认选中问题
+登录后，进入的路径是/admin,但是通过redirect更改了路径，而Menu的属性defaultSelectedKeys只能执行第一次，第二次更改的路径捕捉不到，因此，需要更换另一个属性SelectedKeys，该属性会使最后一次生效。
 
 
+## Category 组件
 
-
+内容区域较多时，可以设置一下内容，来生成滚动条：
+```css
+  min-height: 80%;
+  overflow: auto;
+```
 
 
 

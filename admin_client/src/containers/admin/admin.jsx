@@ -48,7 +48,7 @@ class Admin extends Component {
           </Sider>
           <Layout>
             <Header/>
-            <Content>
+            <Content className='admin_content'>
               <Switch>
                 <Route path="/admin/home" component={Home}/>
                 <Route path="/admin/prod_about/category" component={Category}/>
@@ -61,7 +61,7 @@ class Admin extends Component {
                 <Redirect to="/admin/home"/>
               </Switch>
             </Content>
-            <Footer>Footer</Footer>
+            <Footer className='admin-footer'>“不要被黑暗阻止，不要被他人语言恶化，接收光明的力量”</Footer>
           </Layout>
         </Layout>
       </div>

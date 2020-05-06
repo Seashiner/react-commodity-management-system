@@ -34,7 +34,6 @@ class Login extends Component {
       message.success('登录成功')
       // this.props.history.replace('/admin')
       this.props.add_userInfo(data)
-      console.log(data);
     }else{
       message.error(msg)
     }

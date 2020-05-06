@@ -5,6 +5,7 @@ import { Button ,Modal } from 'antd';
 import screenfull from 'screenfull'
 import {connect} from 'react-redux'
 import {delete_userInfo} from '../../../redux/actions/login.js'
+import {add_title} from '../../../redux/actions/title.js'
 import dayjs from 'dayjs'
 import {reqWeather} from '../../../api'
 
@@ -12,9 +13,10 @@ const { confirm } = Modal;
 @connect(
   state => ({
     username:state.userInfo.user.username,
-    isLogin:state.userInfo.isLogin
+    isLogin:state.userInfo.isLogin,
+    title:state.title
   }),
-  {delete_userInfo}
+  {delete_userInfo,add_title}
 )
 
 class Header extends Component {
@@ -44,10 +46,9 @@ class Header extends Component {
       content: '退出后需要重新登录', //副标题
 			cancelText:'取消',
 			okText:'确认',
-      onOk() {
+      onOk : ()=> {
         this.props.delete_userInfo()
-      },
-      onCancel() {},
+      }
     });
     
   }
@@ -83,7 +84,7 @@ class Header extends Component {
         </div>
         <div className='header_bottom'>
         <div className="bottom_left">
-						<span>首页</span>
+						<span>{this.props.title}</span>
 					</div>
 					<div className="bottom_right">
 						<span>{this.state.time}</span>
