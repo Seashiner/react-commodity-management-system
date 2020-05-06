@@ -26,10 +26,8 @@ export const reqWeather = ()=>{
   
 }
 
-
-
-
-
+//请求分类列表--同步
+export const reqCategory = () => ajax.get('/manage/category/list')
 
 
 

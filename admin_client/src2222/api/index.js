@@ -20,8 +20,8 @@ export const reqWeatherData = ()=>{
 			}else{
 				message.error('请求天气信息有误，请联系管理员')
 			}
-
-			console.log(err,data);
 		})
 	})
 }
+//请求分类列表
+export const reqCategoryList = () => ajax.get('/manage/category/list')
