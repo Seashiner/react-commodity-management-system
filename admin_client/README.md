@@ -429,7 +429,7 @@ let currentName = pathname.split('/').slice(-1)
 
 情况二：不使用`Form` 标签的`Button`提交表单，需要给`Form` 标签设置 `ref` 属性，通过 `this.refs.xxx`得到了`Form` 表单的实例，`this.refs.xxx.getFieldsValue().yyy` 得到的就是 `name = 'yyy'` 的那个 `Form.Item` 下的 `input` 的 `value` 值；
 
-情况三：单独的input 标签，可以通过自身上的 onChange（event）函数属性 `onChange={(event)=> this.state.keyWord = event.target.value}`
+情况三：单独的input 标签，可以通过自身上的 onChange（event）函数属性 `onChange= {event => this.setState({keyWord:event.target.value})}`
 
 提交表单验证时，需要手动验证数据的合法性，例如数据不能为空，否则不能提交表单
 
