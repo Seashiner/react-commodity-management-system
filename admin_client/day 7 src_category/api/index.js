@@ -30,17 +30,7 @@ export const reqWeather = ()=>{
 export const reqCategory = () => ajax.get('/manage/category/list')
 
 //添加分类列表
-export const reqAddCategory = (categoryName) => ajax.post('/manage/category/add',{categoryName})
-
-//请求更改分类名
-export const reqUpdateCategory = (categoryId,categoryName) => ajax.post('/manage/category/update',{categoryId,categoryName})
-
-//请求商品列表
-export const reqProductList = (pageNum,pageSize) => ajax.get('/manage/product/list',{params:{pageNum,pageSize}})
-
-//请求搜索商品
-export const reqSearchProList = (searchType,keyWord,pageNum,pageSize) =>
-	ajax.get('/manage/product/search',{params:{[searchType]:keyWord,pageNum,pageSize}})
+export const reqAddCategory = (categoryName) => ajax.post('/manage/category/add',categoryName)
 
 
 

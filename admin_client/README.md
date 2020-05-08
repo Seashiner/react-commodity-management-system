@@ -224,7 +224,7 @@ state => ({
     username:state.userInfo.user.username
   })
 ```
-6.处理刷新页面redux信息丢失的问题——localStorage
+6.处理刷新页面,保存在redux中的用户信息丢失的问题——localStorage
 
 ```js
   actions:
@@ -416,11 +416,66 @@ let currentName = pathname.split('/').slice(-1)
 
 ## Category 组件
 
-内容区域较多时，可以设置一下内容，来生成滚动条：
+### 内容区域较多时，可以设置一下内容，来生成滚动条：
 ```css
   min-height: 80%;
   overflow: auto;
 ```
+### antd中如何获取input表单的value值：
+
+情况一：`Form` 标签内置的`Button` 按钮上，自带的 `onFinish` 函数，参数就是`values` 对象；
+
+用`onFinish` 函数提交表单验证时，系统自定义了验证规则
+
+情况二：不使用`Form` 标签的`Button`提交表单，需要给`Form` 标签设置 `ref` 属性，通过 `this.refs.xxx`得到了`Form` 表单的实例，`this.refs.xxx.getFieldsValue().yyy` 得到的就是 `name = 'yyy'` 的那个 `Form.Item` 下的 `input` 的 `value` 值；
+
+情况三：单独的input 标签，可以通过自身上的 onChange（event）函数属性 `onChange={(event)=> this.state.keyWord = event.target.value}`
+
+提交表单验证时，需要手动验证数据的合法性，例如数据不能为空，否则不能提交表单
+
+### antd中如何重置表单（清空表单的内容）
+
+`this.refs.xxx.resetFields()`
+
+### 修改分类的功能弹窗要把添加分类的弹窗 复用 ， 并做数据回显
+
+antd表格的 columns 变量中的 render 函数的参数是所在项的详细信息，当同时指定 dataIndex 时，参数是 dataIndex 的值
+
+antd中 input 标签当没有 Form 包裹时，它的 defaultValue 属性，只在初始时render一次 ； 当被Form 包裹时，它的 defaultValue 属性，会在初始时和Form重置(resetFields)时 render
+
+在 input 标签中使用 defaultValue 属性会报错，应该在 Form 标签中加入 initialValues 属性，该属性是一个对象，属性名是 Form.Item 下的name 属性（initialValues 属性可以给各个 Form.Item 下的表单设置默认值）
+
+
+--------------------------------------------------------------------------------------------
+#### antd 做数据回显：
+
+initialValues={{xxx: yyy}} ————负责初始时的数据回显
+
+this.refs.xxx.setFieldsValue ————负责后续的数据回显
+
+---------------------------------------------------------------------------------------------
+#### 弹窗复用后如何区分是 添加功能 还是 修改功能？
+
+- 添加功能 ：使用的是 Card 系统的 showModal 方法，参数是 event
+
+- 修改功能 : showModal 方法放在了 render 下，参数是该行表格的数据的对象，有自定义的一些属性
+
+判断参数，如果存在 自定义的属性 就执行修改功能，不存在就执行 添加功能；由于只要执行过一次修改，参数对象就永远带有这些自定义属性了，所以需要在判断开始时，对这些自定义属性进行初始化
+
+
+## Product 组件
+
+### 搜索商品列表的请求：
+
+参数有三个，除了pageNum,pageSize ， 还有productName 、productDesc（按照名称或者描述搜索）二者任选其一
+
+```js
+export const reqSearchProList = (productType,keyWord,pageNum,pageSize) => ajax.get('/manage/product/list',{params:{[productType]:keyWord,pageNum,pageSize}})
+```
+
+
+
+
 
 
 

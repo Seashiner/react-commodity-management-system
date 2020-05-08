@@ -6,7 +6,7 @@ export default function(preState = initState , action){
   let newState;
   switch (type) {
     case GET_CATEGORY:
-      newState = data.reverse()
+      newState = data
       return newState
     default:
       return preState

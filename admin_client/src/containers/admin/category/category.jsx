@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Card ,Button ,Table,Modal,Form, Input} from 'antd';
+import { Card ,Button ,Table,Modal,Form, Input,message} from 'antd';
 import {connect} from 'react-redux';
 import {PlusCircleOutlined} from '@ant-design/icons';
-import {reqCategory} from '../../../api/index.js'
+import {reqUpdateCategory ,reqAddCategory} from '../../../api/index.js'
 import {get_category,get_categoryAsync} from '../../../redux/actions/category'
+import {PAGE_SIZE} from '@/config'
 
 
 @connect(
@@ -14,23 +15,67 @@ import {get_category,get_categoryAsync} from '../../../redux/actions/category'
 )
 class Category extends Component {
 
-  state = { visible: false };
-
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
+  state = { 
+    visible: false,
+    name : '',
+    _id:'' ,
+    upDate : false
   };
 
-  handleOk = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
+  showModal = (cateObj) => {
+    const {categoryForm} = this.refs
+    let {name , _id} = cateObj
+    this.name = ''
+    this._id = ''
+    this.upDate = false
+    if(name && _id){
+      //修改
+      this.name = name
+      this._id = _id
+      this.upDate = true
+    }
+    if(categoryForm) categoryForm.setFieldsValue({categoryName:this.name})
+    this.setState({visible: true});
   };
 
-  handleCancel = e => {
-    console.log(e);
+  handleOk = async () => {
+    //拿到value
+    const {categoryForm} = this.refs
+    const {categoryName} = categoryForm.getFieldsValue()
+    //验证合法性
+    if(!categoryName || !categoryName.trim()){
+      //不合法
+      message.error('数据不能为空')
+    }else{
+      //合法
+      let result;
+      if(!this.upDate){
+        result = await reqAddCategory(categoryName)
+      }else{
+        result = await reqUpdateCategory(this._id , categoryName)
+      }
+
+      const {status ,msg} = result
+      if(status === 0){
+        this.getCategoryList()
+        message.success(this.upDate ? '修改分类成功' : '添加分类成功');
+        this.props.get_categoryAsync()
+          //重置表单
+        categoryForm.resetFields()
+        //隐藏弹窗
+        this.setState({visible: false});
+      }else{
+        message.error(msg)
+      }
+      
+    }
+    
+  };
+
+  handleCancel = () => {
+    const {categoryForm} = this.refs
+    categoryForm.resetFields()
+
     this.setState({
       visible: false,
     });
@@ -61,7 +106,10 @@ class Category extends Component {
       },
       {
         title: '操作',
-        render:()=> <Button type="link">修改分类</Button>,
+        //dataIndex: 'name',
+        render:(cateObj)=> {
+          return <Button type="link" onClick={()=>{this.showModal(cateObj)}}>修改分类</Button>
+        },
         key: 'action',
         align:'center',
         width:'20%',
@@ -81,22 +129,22 @@ class Category extends Component {
           bordered
           rowKey='_id'
           pagination={{
-            pageSize:4
+            pageSize:PAGE_SIZE
           }}
           />
         </Card>
 
         <Modal
-          title="新增分类"
+          title={this.upDate ? '修改分类' :"添加分类" }
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           okText='确定'
           cancelText='取消'
         >
-          <Form>
+          <Form ref="categoryForm" initialValues={{categoryName: this.name}}>
             <Form.Item
-              name="category"
+              name="categoryName"
               rules={[{ required: true, message: '不能为空！' }]}
             >
               <Input placeholder="请输入分类名"/>
