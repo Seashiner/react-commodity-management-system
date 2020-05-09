@@ -504,3 +504,16 @@ if(this.props.categoryList.length === 0){
       this.props.get_categoryAsync()
     } 
 ```
+
+## Product 组件—— AddUpdate组件
+
+
+
+
+
+
+
+
+
+
+
