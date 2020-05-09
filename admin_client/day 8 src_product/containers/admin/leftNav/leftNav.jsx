@@ -48,11 +48,9 @@ class LeftNav extends Component {
   computedTitle=(menuList)=>{
     let {pathname} = this.props.location
     let currentKey = pathname.split('/').slice(-1)[0]
-    
     //退出后重新登录，路径会有问题
     if(currentKey === 'admin') currentKey = 'home'
-    if(pathname.indexOf('product')) currentKey = 'product'
-
+    
     let title = ''
 
     menuList.forEach((menuObj)=>{

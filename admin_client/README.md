@@ -472,11 +472,35 @@ this.refs.xxx.setFieldsValue ————负责后续的数据回显
 ```js
 export const reqSearchProList = (productType,keyWord,pageNum,pageSize) => ajax.get('/manage/product/list',{params:{[productType]:keyWord,pageNum,pageSize}})
 ```
+#### 分页器的 onChange 事件，在切换页码时触发，参数时当前的页码，由于该事件不能动态指定，所以初始化显示列表以及搜索显示列表要写成一个函数，在此函数内部判断是初始化显示，还是搜索显示。
+
+### 当表格数据没返回时，有loading效果
+在state 中，设置 isLoading 状态，在请求数据前将 isLoading 设置为 false , 得到数据之后 将 isLoading 设置为 true ；并且在 Table 标签中设置 loading 属性 `loading ={this.state.isLoading}`
 
 
+## Product 组件—— Detail组件
 
+请求回来的数据 imgs 属性是一个数组（可能有多张图片），所以需要使用 map 函数遍历，return 一个 img 标签，所有的img 都有一个公共的地址，该地址定义在 config 文件中
 
+#### imgs.map 会报错：cannot read property 'map' of undefined
 
+这是因为 imgs ，是请求回来的数据，而发送请求的动作是在 DidMount 时，render 时还没有 DidMount，imgs 一瞬间是 undefined ，但马上有值，所以 imgs 是可以展示数据的，但是再 imgs 点属性 就没有值了
 
+解决方法：在初始state给imgs=[]  或在 WillMount 中发请求（不常用）
 
+`thisProductInfo:{imgs:[]}`
 
+#### 返回的数据是 html 如何解析：
+```js
+const {detail} = this.state.thisProductInfo
+
+<p dangerouslySetInnerHTML={{__html:detail}}/>
+```
+
+#### 请求商品列表的状态存在了redux中，可以先尝试从redux中读取列表，读取不到，就再次调用action重新获取
+
+```js
+if(this.props.categoryList.length === 0){
+      this.props.get_categoryAsync()
+    } 
+```

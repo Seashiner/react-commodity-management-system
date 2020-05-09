@@ -45,8 +45,7 @@ export const reqSearchProList = (searchType,keyWord,pageNum,pageSize) =>
 //上架、下架
 export const reqUpdateStatus = (productId,status) => ajax.post('/manage/product/updateStatus',{productId,status})
 
-//根据商品ID获取商品
-export const reqProductInfo = (productId) => ajax.get('/manage/product/info',{params:{productId}})
+
 
 
 

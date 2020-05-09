@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import {Link} from "react-router-dom";
 import { Card,Button,Select,Input,Table, message} from 'antd';
 import {PlusCircleOutlined,SearchOutlined} from '@ant-design/icons';
 import {reqProductList,reqSearchProList,reqUpdateStatus} from '@/api'
@@ -15,34 +14,27 @@ export default class Product extends Component {
     pageNum:1,
     pageSize:2,
 		searchType:'productName',
-		keyWord:'',
-		isLoading:true
+		keyWord:''
 	}
 
 	upDateStatus = async (id ,currentStatus) => {
 
-		if (currentStatus === 1) currentStatus = 2
-		else currentStatus = 1
+		if (currentStatus === 2) currentStatus = 1
+		else currentStatus = 2
 
-		let result = await reqUpdateStatus(id ,currentStatus)
-		const {status,msg} = result
-		if(status === 0){
-			this.getProductList(this.state.pageNum)
-			message.success(currentStatus === 1 ? '下架成功': '上架成功')
-		}else{
-			message.error(msg)
-		}
+		let result = await reqUpdateStatus({id ,currentStatus})
+		console.log(result);
 		
 	}
 
 	getProductList = async(pageNumber=1)=>{
-		this.state.isLoading = true
+
 		let result
 		if(this.isSearch){
 			//搜索
 			const {searchType,keyWord,pageSize} = this.state
       result = await reqSearchProList(searchType,keyWord,pageNumber,pageSize)
-			
+      
       this.isSearch = false
 		}else{
 			result = await	reqProductList(pageNumber,2)
@@ -51,7 +43,7 @@ export default class Product extends Component {
 		const {status,data,msg} = result
 		if(status === 0){
 			const {total,list,pageNum} = data
-			this.setState({productList:list,total,pageNum,isLoading:false})
+			this.setState({productList:list,total,pageNum})
 		}else{
 			message.error(msg)
 		}
@@ -84,21 +76,20 @@ export default class Product extends Component {
 			},
 			{
 				title: '状态',
-				// dataIndex: 'status',
+				dataIndex: 'status',
 				key: 'status',
 				align:'center',
 				render:(statusObj)=>{
-					const {_id , status} = statusObj					
+					const {_id , status} = statusObj
 					return (
 						<div>
 							<Button 
 								type={status === 1 ? 'danger' : 'primary'} 
 								onClick={()=>{this.upDateStatus(_id,status)}}
 							>
-								{status === 1 ? '下架' : '上架'}
-
+									{status === 1 ? '下架' : '上架'}
 							</Button><br/>
-
+							
 							<span>{status === 1 ? '在售' : '售罄'}</span>
 						</div>
 					)
@@ -106,18 +97,13 @@ export default class Product extends Component {
 			},
 			{
 				title: '操作',
-				dataIndex: '_id',
+				//dataIndex: 'action',
 				key: 'action',
 				align:'center',
-				render:(_id)=> (
+				render:()=> (
 					<div>
-						<Link to={`/admin/prod_about/product/detail/${_id}`}>
-							<Button type="link">详情</Button>
-						</Link>
-						<br/>
-						<Link to={`/admin/prod_about/product/detail/${_id}`}>
-							<Button type="link">修改</Button>
-						</Link>
+						<Button type="link">详情</Button><br/>
+						<Button type="link">修改</Button>
 					</div>
 				)
 			},
@@ -149,13 +135,12 @@ export default class Product extends Component {
 					</div>
 				} 
 				extra={
-					<Button type="primary" onClick={()=>{this.props.history.push('/admin/prod_about/product/add')}}>
+					<Button type="primary">
 						<PlusCircleOutlined/>添加商品
 					</Button>
 				} 
 			>
 				<Table 
-					loading ={this.state.isLoading}
 					dataSource={dataSource} 
 					columns={columns} 
 					bordered 
