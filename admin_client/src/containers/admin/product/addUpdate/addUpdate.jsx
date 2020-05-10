@@ -1,15 +1,29 @@
 import React, { Component } from 'react'
 import { Form, Input, Button ,Card ,Select } from 'antd';
 import {ArrowLeftOutlined} from '@ant-design/icons';
+import {connect} from "react-redux";
 import Picture from "./picture/picture";
+import {get_categoryAsync} from "@/redux/actions/category";
+
 
 const {Item} = Form
 const {Option} = Select
 
-export default class AddUpdate extends Component {
+@connect(
+  (state)=>({categoryList:state.categoryList}),
+  {get_categoryAsync}
+)
+class AddUpdate extends Component {
 
-  onFinish=()=>{
+  onFinish=(values)=>{
+    console.log(values);
+    
+  }
 
+  componentDidMount(){
+    if(this.props.categoryList.length === 0){
+      this.props.get_categoryAsync()
+    }    
   }
 
   render() {
@@ -61,10 +75,13 @@ export default class AddUpdate extends Component {
             rules={[{ required: true, message: '必须输入!' }]}
             wrapperCol={{span:8}}
           >
-            <Select defaultValue="">
+            <Select>
               <Option value="">请选择分类</Option>
-              <Option value="lucy">Lucy</Option>
-              <Option value="Yiminghe">yiminghe</Option>
+              {
+                this.props.categoryList.map((categoryObj)=>{
+                  return <Option key={categoryObj._Id} value={categoryObj._id}>{categoryObj.name}</Option>
+                })
+              }
             </Select>
           </Item>
 
@@ -94,3 +111,5 @@ export default class AddUpdate extends Component {
     )
   }
 }
+
+export default AddUpdate

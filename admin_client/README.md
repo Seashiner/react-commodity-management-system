@@ -507,11 +507,50 @@ if(this.props.categoryList.length === 0){
 
 ## Product 组件—— AddUpdate组件
 
+### 文件/图片上传
 
+<img src='./src/assets/images/文件上传模式一.png'>
 
+<img src='./src/assets/images/文件上传模式二.png'>
 
+antd 封装的是第二种模式：
 
+antd 需要借助 Upload 来发送 上传文件 的请求
 
+```js
+<Upload
+  action="/api/manage/img/upload" //图片上传的接口路径
+  name="image" // name是接口请求需要携带的参数名；参数值就是上传的那张图片，不用单独设置
+  onChange={this.handleChange}
+  ... ...
+>
+  ... ...
+</Upload>
+
+```
+删除已上传的图片，需要自己写ajax
+```js
+handleChange = async ({ file,fileList }) => {
+    if(file.status === 'done'){
+      //response 是服务器返回的图片的名称和地址
+      const {status,data} = file.response
+      if(status === 0){
+        Message.success('上传成功！')
+        const {name,url} = data
+        fileList[fileList.length-1].name = name
+        fileList[fileList.length-1].url = url
+      }
+    }else if(file.status === 'remove'){
+      const result = await reqDeletePic(file.name)
+      const {status} = result
+      if(status === 0) Message.success('删除成功！')
+      else Message.error('删除失败！')
+    }
+    
+    this.setState({ fileList })
+  };
+
+```
 
 
 

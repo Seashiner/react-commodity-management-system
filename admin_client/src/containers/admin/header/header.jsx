@@ -88,7 +88,7 @@ class Header extends Component {
 					</div>
 					<div className="bottom_right">
 						<span>{this.state.time}</span>
-						<img src={dayPictureUrl}/>
+						<img src={dayPictureUrl} alt='天气'/>
 						<span>{weather}</span>&nbsp;
 						<span>{temperature}</span>
 					</div>

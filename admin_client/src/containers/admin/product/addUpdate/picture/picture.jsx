@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Upload, Modal } from 'antd';
+import { Upload, Modal ,Message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { reqDeletePic } from "@/api";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -16,14 +17,7 @@ export default class Picture extends Component {
     previewVisible: false,
     previewImage: '',
     previewTitle: '',
-    fileList: [
-      {
-        uid: '-1',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      }
-    ],
+    fileList: [],
   };
 
   handleCancel = () => this.setState({ previewVisible: false });
@@ -40,20 +34,38 @@ export default class Picture extends Component {
     });
   };
 
-  handleChange = ({ fileList }) => this.setState({ fileList });
+  handleChange = async ({ file,fileList }) => {
+    if(file.status === 'done'){
+      const {status,data} = file.response
+      if(status === 0){
+        Message.success('上传成功！')
+        const {name,url} = data
+        fileList[fileList.length-1].name = name
+        fileList[fileList.length-1].url = url
+      }
+    }else if(file.status === 'remove'){
+      const result = await reqDeletePic(file.name)
+      const {status} = result
+      if(status === 0) Message.success('删除成功！')
+      else Message.error('删除失败！')
+    }
+    
+    this.setState({ fileList })
+  };
 
   render() {
     const { previewVisible, previewImage, fileList, previewTitle } = this.state;
     const uploadButton = (
       <div>
         <PlusOutlined />
-        <div className="ant-upload-text">Upload</div>
+        <div className="ant-upload-text">点我上传</div>
       </div>
     );
     return (
       <div className="clearfix">
         <Upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          action="/api/manage/img/upload"
+          name="image"
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}

@@ -115,7 +115,7 @@ export default class Product extends Component {
 							<Button type="link">详情</Button>
 						</Link>
 						<br/>
-						<Link to={`/admin/prod_about/product/detail/${_id}`}>
+						<Link to={`/admin/prod_about/product/update/${_id}`}>
 							<Button type="link">修改</Button>
 						</Link>
 					</div>

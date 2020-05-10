@@ -48,7 +48,8 @@ export const reqUpdateStatus = (productId,status) => ajax.post('/manage/product/
 //根据商品ID获取商品
 export const reqProductInfo = (productId) => ajax.get('/manage/product/info',{params:{productId}})
 
-
+//删除商品图片
+export const reqDeletePic = (name) => ajax.post('/manage/img/delete',{name})
 
 
 
