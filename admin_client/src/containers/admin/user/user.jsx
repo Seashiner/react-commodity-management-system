@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import {Card,Button,Table,Modal,Form,Input,Select} from 'antd'
+import {Card,Button,Table,Modal,Form,Input,Select,message} from 'antd'
 import {PlusCircleOutlined} from '@ant-design/icons';
+import dayjs from "dayjs";
+import {reqUserInfo,reqAddUser,reqUpdateUser,reqDeleteUser} from "@/api";
 
 const {Item} = Form
 const {Option} = Select
@@ -8,7 +10,9 @@ const {Option} = Select
 export default class User extends Component {
 
 	state = { 
-		visible: false //弹窗是否展示
+		visible: false, //弹窗是否展示
+		userInfo:[],
+		roleInfo:[]
 	};
 
 	//展示弹窗
@@ -24,34 +28,38 @@ export default class User extends Component {
 	//弹窗取消按钮回调
 	handleCancel = () => {
     this.setState({visible: false});
-  };
+	};
+
+	updateUser=()=>{
+		
+	}
+
+	getUserInfo = async ()=>{
+		const result = await reqUserInfo()
+		const {status,data,msg} = result
+		const {users,roles} = data
+		
+    if(status === 0){
+			console.log(data);
+      this.setState({userInfo:users.reverse(),roleInfo:roles})      
+    }else{
+      message.error(msg)
+    }
+	}
+	
+	componentDidMount(){
+		this.getUserInfo()
+	}
 
 	render() {
 		//表格数据源
-		const dataSource = [
-			{
-				key: '1',
-				name: '张三',
-				email: 'xxxxxxxx@xxxxxxxx',
-				phone: '13xxxxxxxxxx',
-				create_time: '2020-05-xxxxx',
-				role_id: '00001',
-			},
-			{
-				key: '2',
-				name: '李四',
-				email: 'yyyy@yyyy',
-				phone: '13yyyyy',
-				create_time: '2020-05-yyyyyy',
-				role_id: '00002',
-			},
-		];
+		const dataSource = this.state.userInfo;
 		//表格列配置
 		const columns = [
 			{
 				title: '姓名',
-				dataIndex: 'name',
-				key: 'name',
+				dataIndex: 'username',
+				key: 'username',
 			},
 			{
 				title: '邮箱',
@@ -67,11 +75,18 @@ export default class User extends Component {
 				title: '注册时间',
 				dataIndex: 'create_time',
 				key: 'create_time',
+        render:(create_time)=> dayjs(create_time).format('YYYY-MM-DD HH:mm:ss')
 			},
 			{
 				title: '所属角色',
 				dataIndex: 'role_id',
 				key: 'role_id',
+        render:(id)=> {
+					let role = this.state.roleInfo.find((roleObj)=>{
+						return roleObj._id === id
+					})
+					return role.name
+				}
 			},
 			{
 				title: '操作',
@@ -80,7 +95,7 @@ export default class User extends Component {
 				align:'center',
 				render:()=>(
 					<div>
-						<Button type="link">修改</Button>
+						<Button type="link" onClick={this.updateUser}>修改</Button>
 						<Button type="link">删除</Button>
 					</div>
 				)
@@ -96,6 +111,7 @@ export default class User extends Component {
 						dataSource={dataSource} //数据源
 						columns={columns} //列配置
 						bordered //边框
+						rowKey="_id"
 					/>
 				</Card>
 				{/* Modal弹窗 */}

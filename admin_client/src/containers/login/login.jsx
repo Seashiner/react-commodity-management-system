@@ -64,11 +64,11 @@ class Login extends Component {
     let errMsg = []
     if(!value.trim()) errMsg.push('密码必须输入！')
 
-    if(value.length < 4) errMsg.push('必须大于等于4位！')
+    if(value.length < 2) errMsg.push('必须大于等于2位！')
 
     if(value.length > 13) errMsg.push('必须小于等于12位！')
 
-    if(!(/^\w+$/).test(value)) errMsg.push('必须是英文、数字或下划线组成！')
+    // if(!(/^\w+$/).test(value)) errMsg.push('必须是英文、数字或下划线组成！')
 
     if(errMsg.length !== 0) return Promise.reject(errMsg)
 
@@ -98,8 +98,8 @@ class Login extends Component {
               rules={[
                 { required: true, message: '请输入用户名!'},
                 { max: 12, message: '必须小于等于12位!'},
-                { min: 4, message: '必须大于等于4位!'},
-                { pattern: /^\w+$/, message: '必须是英文、数字或下划线组成!'}
+                { min: 2, message: '必须大于等于2位!'},
+                // { pattern: /^\w+$/, message: '必须是英文、数字或下划线组成!'}
               ]}
             >
               <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />

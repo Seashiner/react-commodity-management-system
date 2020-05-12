@@ -11,7 +11,9 @@ const { SubMenu ,Item } = Menu;
 
 @connect(
   state => ({
-    title:state.title
+    title:state.title,
+    userMenus:state.userInfo.user.role.menus,
+    userName:state.userInfo.user.username
   }),
   {add_title}
 )
@@ -23,26 +25,43 @@ class LeftNav extends Component {
     this.props.add_title(title)
   }
 
+  //判断是否有权限
+  isAuth=(item)=>{
+    const {userMenus,userName} = this.props
+    if(userName === 'admin') return true
+    if(!item.children){
+      return userMenus.find((menu) => menu === item.key)
+    }else{
+      // this.isAuth(item.children)
+			return item.children.some((childItem)=>userMenus.indexOf(childItem.key) !== -1)
+    }
+    
+  }
+
   createMenu = (menuList) =>{
+    
     return menuList.map((item)=>{
-      if(!item.children){
-        return (
-          <Item key={item.key} onClick={()=>{this.saveTitle(item.title)}}>
-            <Link to={item.path}>
-              {<item.icon/>}
-              {item.title}
-            </Link>
-          </Item>
-        )
-      }else{
-        return (
-          <SubMenu key={item.key} icon={<item.icon/>} title={item.title}>
-            {this.createMenu(item.children)}
-          </SubMenu>
-        )  
+      //判断是否有权限
+      if(this.isAuth(item)){
+        if(!item.children){
+          return (
+            <Item key={item.key} onClick={()=>{this.saveTitle(item.title)}}>
+              <Link to={item.path}>
+                {<item.icon/>}
+                {item.title}
+              </Link>
+            </Item>
+          )
+        }else{
+          return (
+            <SubMenu key={item.key} icon={<item.icon/>} title={item.title}>
+              {this.createMenu(item.children)}
+            </SubMenu>
+          )  
+        }
       }
-      
     })
+    
   }
 
   computedTitle=(menuList)=>{
