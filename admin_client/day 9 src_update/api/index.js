@@ -2,9 +2,6 @@ import ajax from './ajax.js'
 import jsonp from 'jsonp'
 import {LOCATION , OUTPUT , AK} from '../config'
 import { message } from 'antd';
-import store from '@/redux/store'
-
-const {username} = store.getState().userInfo.user
 
 //请求登录的函数,loginObj形如：{username:'xx',password:'xx'}
 export const reqLogin =(loginObj) => ajax.post('/login' , loginObj)
@@ -65,6 +62,4 @@ export const reqRoleInfo = () => ajax.get('/manage/role/list')
 //添加角色
 export const reqAddRole = (roleName) => ajax.post('/manage/role/add',{roleName})
 //更新角色权限
-export const reqUpdateRole = (_id,menus) => ajax.post('/manage/role/update',{_id,auth_name:username,menus,auth_time:Date.now()})
-
-
+export const reqUpdateRole = (_id,auth_name,menus,auth_time) => ajax.post('/manage/role/update',{_id,auth_name,menus,auth_time})
