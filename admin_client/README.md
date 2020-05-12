@@ -552,7 +552,43 @@ handleChange = async ({ file,fileList }) => {
 
 ```
 
+### 富文本编辑器（wysiwyg）
 
+参考文档：
+
+https://github.com/jpuri/react-draft-wysiwyg
+
+https://jpuri.github.io/react-draft-wysiwyg/#/demo
+
+`yarn add react-draft-wysiwyg draft-js draftjs-to-html html-to-draftjs`
+
+`import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'`
+
+将富文本的形式转换为HTML
+```js
+draftToHtml(convertToRaw(editorState.getCurrentContent()))
+```
+
+将HTML的形式转换为富文本(富文本的数据回显)
+```js
+import { ContentState} from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
+
+setEditorContent=(html)=>{
+    const contentBlock = htmlToDraft(html);
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      const editorState = EditorState.createWithContent(contentState);
+      this.setState({
+        editorState,
+      });
+    }
+  }
+```
+
+### 如何获取子组件内的方法并调用
+
+给子组件添加 ref 属性，通过 `this.refs.子组件名.子组件内的方法()`
 
 
 

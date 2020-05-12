@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Form, Input, Button ,Card ,Select } from 'antd';
+import { Form, Input, Button ,Card ,Select,message } from 'antd';
 import {ArrowLeftOutlined} from '@ant-design/icons';
 import {connect} from "react-redux";
 import Picture from "./picture/picture";
+import RichText from "./richText/richText";
 import {get_categoryAsync} from "@/redux/actions/category";
-
+import {reqAddProduct,reqProductInfo,reqUpdateProduct} from "@/api";
 
 const {Item} = Form
 const {Option} = Select
@@ -15,26 +16,75 @@ const {Option} = Select
 )
 class AddUpdate extends Component {
 
-  onFinish=(values)=>{
-    console.log(values);
+  state={
+    isUpdate:false,
+    isLoading:true,
+    id:''
+  }
+
+  getProductInfoById = async (id)=>{
+    this.setState({isLoading:true})
+    const result = await reqProductInfo(id)
+
+    const {status,data,msg} = result
+    if(status === 0){
+      console.log(data);
+      this.setState({isLoading:false})
+      const {name,desc,price,categoryId,imgs,detail} = data
+      this.refs.addUpdateForm.setFieldsValue({name,desc,price,categoryId})
+      this.refs.picture.setFileListByImg(imgs)
+      this.refs.richText.setEditorContent(detail)
+      // message.success('成功')
+    }else{
+      message.error(msg)
+    }
+  }
+
+  onFinish = async (values)=>{
+    values.imgs = this.refs.picture.fileNameArr()
+    values.detail = this.refs.richText.getEditorContent()
+    let result;
+    if(this.state.isUpdate){
+      values._id = this.state.id
+      result = await reqUpdateProduct(values)
+    }else{
+      result = await reqAddProduct(values)
+    }
     
+    const {status,msg} = result
+    if(status === 0){
+      message.success(this.state.isUpdate ?'修改成功':'添加成功')
+      this.props.history.replace('/admin/prod_about/product')
+    }else{
+      message.error(msg)
+    }
   }
 
   componentDidMount(){
     if(this.props.categoryList.length === 0){
       this.props.get_categoryAsync()
-    }    
+    }  
+    const {id} = this.props.match.params  
+    if(id){
+      this.setState({isUpdate:true,id})
+      this.getProductInfoById(id)
+    }else{
+      this.setState({isUpdate:false})
+    }
   }
 
   render() {
     return (
-      <Card title={
-        <div>
-          <Button type = 'link' onClick={()=>{this.props.history.goBack()}}><ArrowLeftOutlined />返回</Button>
-          <span>添加商品</span>
-        </div>
-      }>
+      <Card 
+        loading={this.state.isLoading}
+        title={
+          <div>
+            <Button type = 'link' onClick={()=>{this.props.history.goBack()}}><ArrowLeftOutlined />返回</Button>
+            <span>{this.state.isUpdate ? '修改商品' : '添加商品'}</span>
+          </div>
+        }>
         <Form
+          ref="addUpdateForm"
           onFinish={this.onFinish}
         >
           <Item
@@ -78,10 +128,10 @@ class AddUpdate extends Component {
             <Select>
               <Option value="">请选择分类</Option>
               {
-                this.props.categoryList.map((categoryObj)=>{
-                  return <Option key={categoryObj._Id} value={categoryObj._id}>{categoryObj.name}</Option>
-                })
-              }
+								this.props.categoryList.map((categoryObj)=>{
+									return <Option key={categoryObj._id} value={categoryObj._id}>{categoryObj.name}</Option>
+								})
+							}
             </Select>
           </Item>
 
@@ -90,15 +140,16 @@ class AddUpdate extends Component {
             name="imgs"
             style={{marginLeft:'12px'}}
           >
-            <Picture/>
+            <Picture ref="picture"/>
           </Item>
 
           <Item
             label="商品详情"
             name="detail"
+            wrapperCol={{span:20}}
             style={{marginLeft:'12px'}}
           >
-            
+            <RichText ref="richText"/>
           </Item>
 
           <Item>

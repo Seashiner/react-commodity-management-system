@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Upload, Modal ,Message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { reqDeletePic } from "@/api";
+import { IMG_BASE_URL } from "@/config";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -19,6 +20,27 @@ export default class Picture extends Component {
     previewTitle: '',
     fileList: [],
   };
+
+  setFileListByImg=(imgArr)=>{
+    let fileList = []
+    imgArr.forEach((imgName,index)=>{
+      fileList.push({
+        uid:index,
+        status:'done',
+        name:imgName,
+        url:IMG_BASE_URL + imgName
+      })
+    })
+    this.setState({fileList})
+  }
+
+  fileNameArr=()=>{
+    let arr = []
+    this.state.fileList.forEach((fileObj)=>{
+      arr.push(fileObj.name)
+    })
+    return arr
+  }
 
   handleCancel = () => this.setState({ previewVisible: false });
 

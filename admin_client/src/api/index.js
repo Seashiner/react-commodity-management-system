@@ -51,5 +51,10 @@ export const reqProductInfo = (productId) => ajax.get('/manage/product/info',{pa
 //删除商品图片
 export const reqDeletePic = (name) => ajax.post('/manage/img/delete',{name})
 
+//添加商品
+export const reqAddProduct = (productObj) => ajax.post('/manage/product/add',productObj)
+
+//修改商品
+export const reqUpdateProduct = (productObj) => ajax.post('/manage/product/update',productObj)
 
 
