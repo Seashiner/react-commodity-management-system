@@ -28,7 +28,6 @@ class AddUpdate extends Component {
 
     const {status,data,msg} = result
     if(status === 0){
-      console.log(data);
       this.setState({isLoading:false})
       const {name,desc,price,categoryId,imgs,detail} = data
       this.refs.addUpdateForm.setFieldsValue({name,desc,price,categoryId})

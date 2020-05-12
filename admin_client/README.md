@@ -590,5 +590,22 @@ setEditorContent=(html)=>{
 
 给子组件添加 ref 属性，通过 `this.refs.子组件名.子组件内的方法()`
 
+## Echarts
+
+需要使用 echarts for react 库
+
+`yarn add echarts-for-react`
+
+`yarn add echarts`
+
+
+
+
+
+
+
+
+
+
 
 
